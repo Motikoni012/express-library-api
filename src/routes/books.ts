@@ -1,8 +1,9 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { books, generateBookId } from "../data/books";
 import { Book } from "../models/book";
 import { validateBook } from "../middleware/validateBook";
 import { error } from "console";
+import { AppError } from "../utils/AppError";
 
 const router = express.Router()
 
@@ -25,18 +26,22 @@ router.post("/", validateBook, (req: Request, res: Response) => {
     return res.status(201).json(newBook)
 })
 
-router.get("/:id", (req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    if (Number.isNaN(id)) {
-        return res.status(400).json({error: "Invalid book id."})
-    }
+router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = Number(req.params.id)
+        if (Number.isNaN(id)) {
+            throw new AppError("Invalid book id.")
+        }
 
-    const book = books.find(b => b.id === id)
-    if(!book) {
-        return res.status(404).json({error: "Book not found."})
-    }
+        const book = books.find(b => b.id === id)
+        if(!book) {
+            throw new AppError("Book not found", 404)
+        }
 
-    return res.json(book)
+        res.json(book)
+    } catch (error) {
+        next(error)
+    }
 })
 
 router.put("/:id", validateBook, (req: Request, res: Response) => {

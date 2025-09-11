@@ -2,6 +2,7 @@ import express from "express";
 import logger from "./middleware/logger";
 import authorRouter from "./routes/authors";
 import booksRouter from "./routes/books";
+import { errorHandler } from "./middleware/errorHandler";
 
 const app = express()
 
@@ -14,6 +15,8 @@ app.get("/", (req, res) => {
 
 app.use("/authors", authorRouter)
 app.use("/books", booksRouter)
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
