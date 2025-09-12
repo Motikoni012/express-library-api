@@ -7,8 +7,45 @@ import { AppError } from "../utils/AppError";
 
 const router = express.Router()
 
-router.get("/", (req: Request, res: Response) => {
-    res.json(books)
+router.get("/", (req, res, next) => {
+    try {
+        let result = [...books]
+
+        const {search, year} = req.query
+
+        if(search && typeof search === "string") {
+            const lower = search.toLowerCase()
+            result = result.filter(b => b.title.toLowerCase().includes(lower))
+        }
+
+        if(year) {
+            const y = Number(year)
+            if(!Number.isNaN(y)) {
+                result = result.filter(b => b.year === y)
+            }
+
+            const {sort} = req.query
+            if(sort === "title" || sort === "year") {
+                result.sort((a, b) => {
+                    const va = a[sort]
+                    const vb = b[sort]
+                    return va > vb ? 1 : va < vb ? -1 : 0
+                })
+            }
+
+            const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined
+            const page = req.query.page ? parseInt(req.query.page as string, 10) : 1
+
+            if(limit && limit > 0) {
+                const start = (page - 1) * limit
+                result = result.slice(start, start + limit)
+            }
+
+            res.json(result)
+        }
+    } catch (err) {
+        next(err)
+    }
 })
 
 router.post("/", validateBook, (req: Request, res: Response) => {
