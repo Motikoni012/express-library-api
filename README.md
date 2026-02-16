@@ -1,39 +1,180 @@
-# express-library-api
-# Library API
+````md
+# Express-Library-Api
 
-A RESTful API for managing authors and books in a community library.
+# Description
 
-## Features
+A simple RESTful API built with **Node.js**, **TypeScript**, and **Express JS** for managing a book library.  
+Supports CRUD operations (Create, Read, Update, Delete) for both **Authors** and **Books** using JSON data.
 
-CRUD operations for Authors & Books
+# Installation
 
-Relationship: books belong to authors
+1. Clone the repository
 
-Input validation & centralized error handling
+   ```bash
+   git clone https://github.com/Motikoni012/express-library-api.git
+   cd express-library-api
+   code .
+````
 
-Query params: search, filter, sort, paginate
+2. Install dependencies
 
-## Tech Stack
+   ```bash
+   git checkout dev
+   npm install
+   ```
 
-Node.js + Express
+# Usage
 
-TypeScript
+1. Run Project
 
-Nodemon (dev)
+   ```bash
+   npm run dev
+   ```
 
-## Installation
-```bash
-git clone https://github.com/Motikoni012/express-library-api.git
-cd express-library-api
-npm install
+---
+
+# API Endpoints
+
+* NB: Use [https://www.postman.com/](https://www.postman.com/) for endpoint testing
+* Base URL:
+
+```
+http://localhost:3000
 ```
 
-## Running Locally
-```bash
-npm run dev      * start in watch mode
-* or
-npm run build && npm start
+(Or your preferred port — can be changed in `server.ts`)
+
+---
+
+## Authors Endpoints
+
+### Get all authors
+
+`GET /authors`
+
+---
+
+### Get single author
+
+`GET /authors/id`
+
+---
+
+### Add new author
+
+`POST /authors`
+
+**Request body:**
+
+```json
+ {id: 1, name: "Shandre Cambell", birthYear: 1830}
 ```
 
+---
 
-Server runs at http://localhost:3000.
+### Update author
+
+`PUT /authors/id`
+
+**Request body:**
+
+```json
+ {id: 1, name: "Shandre Cambell", birthYear: 1830}
+```
+
+---
+
+### Delete author
+
+`DELETE /authors/id`
+
+---
+
+## Books Endpoints
+
+### Get all books
+
+`GET /books`
+
+---
+
+### Get single book
+
+`GET /books/id`
+
+---
+
+### Add new book
+
+`POST /books`
+
+**Request body:**
+
+```json
+{id: 2, title: "Until the Last Dawn", year: 2007, authorId: 2, genre: "Novel"}
+```
+
+---
+
+### Update book
+
+`PUT /books/id`
+
+**Request body:**
+
+```json
+{id: 1, title: "The Forgotten Kingdom", year: 1868, authorId: 1, genre: "Historical Fiction"}
+```
+
+---
+
+### Delete book
+
+`DELETE /books/id`
+
+---
+
+### Get books by author
+
+`GET /authors/id/books`
+
+---
+
+# Scripts
+
+```bash
+npm run dev     # Run development server
+npm run build   # Compile TypeScript
+npm start       # Run production build
+```
+
+---
+
+# Project Structure
+
+```bash
+src/
+├── data/          # Request handlers
+│   ├── authors.ts         # Author request handlers
+│   └── books.ts           # Book request handlers
+├── middleware/           # Middleware handlers
+│   ├── errorHandler.ts       # Error handling middleware
+│   ├── logger.ts      # Request logger middleware
+│   └── validationBook.ts  # Validation middleware
+├── models/               # Data models
+│   ├── author.ts         # Author model
+│   └── book.ts           # Book model
+├── routes/               # API routes
+│   ├── authors.ts         # Authors router
+│   └── books.ts           # Books router
+└── server.ts             # App entry point
+```
+
+---
+
+# Technologies
+
+* Node.js
+* TypeScript
+* Express.js
+* Postman (for API testing)
